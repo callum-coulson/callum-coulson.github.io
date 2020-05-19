@@ -1,6 +1,6 @@
 /*!
  * html2canvas 1.0.0-rc.5 <https://html2canvas.hertzen.com>
- * Copyright (c) 2020 Niklas von Hertzen <https://hertzen.com>
+ * Copyright (c) 2019 Niklas von Hertzen <https://hertzen.com>
  * Released under MIT License
  */
 (function (global, factory) {
@@ -410,8 +410,8 @@
     var SA = 42; //  Provide a line break opportunity contingent on additional, language-specific context analysis
     var XX = 43; //  Have as yet unknown line breaking behavior or unassigned code positions
     var BREAK_MANDATORY = '!';
-    var BREAK_NOT_ALLOWED = '�';
-    var BREAK_ALLOWED = '�';
+    var BREAK_NOT_ALLOWED = '×';
+    var BREAK_ALLOWED = '÷';
     var UnicodeTrie = createTrieFromBase64(base64);
     var ALPHABETICS = [AL, HL];
     var HARD_LINE_BREAKS = [BK, CR, LF, NL];
@@ -435,7 +435,7 @@
                 categories.push(false);
             }
             if (['normal', 'auto', 'loose'].indexOf(lineBreak) !== -1) {
-                // U+2010, � U+2013, ? U+301C, ? U+30A0
+                // U+2010, – U+2013, 〜 U+301C, ゠ U+30A0
                 if ([0x2010, 0x2013, 0x301c, 0x30a0].indexOf(codePoint) !== -1) {
                     indicies.push(index);
                     return types.push(CB);
@@ -584,15 +584,15 @@
         if ([SP, BA, HY].indexOf(current) === -1 && next === GL) {
             return BREAK_NOT_ALLOWED;
         }
-        // LB13 Do not break before �]� or �!� or �;� or �/�, even after spaces.
+        // LB13 Do not break before ‘]’ or ‘!’ or ‘;’ or ‘/’, even after spaces.
         if ([CL, CP, EX, IS, SY].indexOf(next) !== -1) {
             return BREAK_NOT_ALLOWED;
         }
-        // LB14 Do not break after �[�, even after spaces.
+        // LB14 Do not break after ‘[’, even after spaces.
         if (previousNonSpaceClassType(currentIndex, classTypes) === OP) {
             return BREAK_NOT_ALLOWED;
         }
-        // LB15 Do not break within ��[�, even with intervening spaces.
+        // LB15 Do not break within ‘”[’, even with intervening spaces.
         if (isAdjacentWithSpaceIgnored(QU, OP, currentIndex, classTypes)) {
             return BREAK_NOT_ALLOWED;
         }
@@ -600,7 +600,7 @@
         if (isAdjacentWithSpaceIgnored([CL, CP], NS, currentIndex, classTypes)) {
             return BREAK_NOT_ALLOWED;
         }
-        // LB17 Do not break within ����, even with intervening spaces.
+        // LB17 Do not break within ‘——’, even with intervening spaces.
         if (isAdjacentWithSpaceIgnored(B2, B2, currentIndex, classTypes)) {
             return BREAK_NOT_ALLOWED;
         }
@@ -608,7 +608,7 @@
         if (current === SP) {
             return BREAK_ALLOWED;
         }
-        // LB19 Do not break before or after quotation marks, such as � � �.
+        // LB19 Do not break before or after quotation marks, such as ‘ ” ’.
         if (current === QU || next === QU) {
             return BREAK_NOT_ALLOWED;
         }
@@ -624,7 +624,7 @@
         if (before === HL && HYPHEN.indexOf(current) !== -1) {
             return BREAK_NOT_ALLOWED;
         }
-        // LB21b Don�t break between Solidus and Hebrew letters.
+        // LB21b Don’t break between Solidus and Hebrew letters.
         if (current === SY && next === HL) {
             return BREAK_NOT_ALLOWED;
         }
@@ -648,16 +648,16 @@
         }
         // LB25 Do not break between the following pairs of classes relevant to numbers:
         if (
-        // (PR | PO) � ( OP | HY )? NU
+        // (PR | PO) × ( OP | HY )? NU
         ([PR, PO].indexOf(current) !== -1 &&
             (next === NU || ([OP, HY].indexOf(next) !== -1 && classTypes[afterIndex + 1] === NU))) ||
-            // ( OP | HY ) � NU
+            // ( OP | HY ) × NU
             ([OP, HY].indexOf(current) !== -1 && next === NU) ||
-            // NU �	(NU | SY | IS)
+            // NU ×	(NU | SY | IS)
             (current === NU && [NU, SY, IS].indexOf(next) !== -1)) {
             return BREAK_NOT_ALLOWED;
         }
-        // NU (NU | SY | IS)* � (NU | SY | IS | CL | CP)
+        // NU (NU | SY | IS)* × (NU | SY | IS | CL | CP)
         if ([NU, SY, IS, CL, CP].indexOf(next) !== -1) {
             var prevIndex = currentIndex;
             while (prevIndex >= 0) {
@@ -673,7 +673,7 @@
                 }
             }
         }
-        // NU (NU | SY | IS)* (CL | CP)? � (PO | PR))
+        // NU (NU | SY | IS)* (CL | CP)? × (PO | PR))
         if ([PR, PO].indexOf(next) !== -1) {
             var prevIndex = [CL, CP].indexOf(current) !== -1 ? beforeIndex : currentIndex;
             while (prevIndex >= 0) {
@@ -700,11 +700,11 @@
             (KOREAN_SYLLABLE_BLOCK.indexOf(next) !== -1 && current === PR)) {
             return BREAK_NOT_ALLOWED;
         }
-        // LB28 Do not break between alphabetics (�at�).
+        // LB28 Do not break between alphabetics (“at”).
         if (ALPHABETICS.indexOf(current) !== -1 && ALPHABETICS.indexOf(next) !== -1) {
             return BREAK_NOT_ALLOWED;
         }
-        // LB29 Do not break between numeric punctuation and alphabetics (�e.g.�).
+        // LB29 Do not break between numeric punctuation and alphabetics (“e.g.”).
         if (current === IS && ALPHABETICS.indexOf(next) !== -1) {
             return BREAK_NOT_ALLOWED;
         }
@@ -2116,7 +2116,7 @@
         var ry = 0;
         switch (gradient.size) {
             case CSSRadialExtent.CLOSEST_SIDE:
-                // The ending shape is sized so that that it exactly meets the side of the gradient box closest to the gradient�s center.
+                // The ending shape is sized so that that it exactly meets the side of the gradient box closest to the gradient’s center.
                 // If the shape is an ellipse, it exactly meets the closest side in each dimension.
                 if (gradient.shape === CSSRadialShape.CIRCLE) {
                     rx = ry = Math.min(Math.abs(x), Math.abs(x - width), Math.abs(y), Math.abs(y - height));
@@ -2127,7 +2127,7 @@
                 }
                 break;
             case CSSRadialExtent.CLOSEST_CORNER:
-                // The ending shape is sized so that that it passes through the corner of the gradient box closest to the gradient�s center.
+                // The ending shape is sized so that that it passes through the corner of the gradient box closest to the gradient’s center.
                 // If the shape is an ellipse, the ending shape is given the same aspect-ratio it would have if closest-side were specified.
                 if (gradient.shape === CSSRadialShape.CIRCLE) {
                     rx = ry = Math.min(distance(x, y), distance(x, y - height), distance(x - width, y), distance(x - width, y - height));
@@ -4526,9 +4526,6 @@
     var isHTMLElementNode = function (node) {
         return typeof node.style !== 'undefined';
     };
-    var isSVGElementNode = function (element) {
-        return typeof element.className === 'object';
-    };
     var isLIElement = function (node) { return node.tagName === 'LI'; };
     var isOLElement = function (node) { return node.tagName === 'OL'; };
     var isInputElement = function (node) { return node.tagName === 'INPUT'; };
@@ -4635,42 +4632,42 @@
             1
         ],
         values: [
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?'
+            'Ք',
+            'Փ',
+            'Ւ',
+            'Ց',
+            'Ր',
+            'Տ',
+            'Վ',
+            'Ս',
+            'Ռ',
+            'Ջ',
+            'Պ',
+            'Չ',
+            'Ո',
+            'Շ',
+            'Ն',
+            'Յ',
+            'Մ',
+            'Ճ',
+            'Ղ',
+            'Ձ',
+            'Հ',
+            'Կ',
+            'Ծ',
+            'Խ',
+            'Լ',
+            'Ի',
+            'Ժ',
+            'Թ',
+            'Ը',
+            'Է',
+            'Զ',
+            'Ե',
+            'Դ',
+            'Գ',
+            'Բ',
+            'Ա'
         ]
     };
     var HEBREW = {
@@ -4714,43 +4711,43 @@
             1
         ],
         values: [
-            '??',
-            '??',
-            '??',
-            '??',
-            '??',
-            '??',
-            '??',
-            '??',
-            '??',
-            '??',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '??',
-            '??',
-            '??',
-            '??',
-            '??',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?'
+            'י׳',
+            'ט׳',
+            'ח׳',
+            'ז׳',
+            'ו׳',
+            'ה׳',
+            'ד׳',
+            'ג׳',
+            'ב׳',
+            'א׳',
+            'ת',
+            'ש',
+            'ר',
+            'ק',
+            'צ',
+            'פ',
+            'ע',
+            'ס',
+            'נ',
+            'מ',
+            'ל',
+            'כ',
+            'יט',
+            'יח',
+            'יז',
+            'טז',
+            'טו',
+            'י',
+            'ט',
+            'ח',
+            'ז',
+            'ו',
+            'ה',
+            'ד',
+            'ג',
+            'ב',
+            'א'
         ]
     };
     var GEORGIAN = {
@@ -4794,43 +4791,43 @@
             1
         ],
         values: [
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?',
-            '?'
+            'ჵ',
+            'ჰ',
+            'ჯ',
+            'ჴ',
+            'ხ',
+            'ჭ',
+            'წ',
+            'ძ',
+            'ც',
+            'ჩ',
+            'შ',
+            'ყ',
+            'ღ',
+            'ქ',
+            'ფ',
+            'ჳ',
+            'ტ',
+            'ს',
+            'რ',
+            'ჟ',
+            'პ',
+            'ო',
+            'ჲ',
+            'ნ',
+            'მ',
+            'ლ',
+            'კ',
+            'ი',
+            'თ',
+            'ჱ',
+            'ზ',
+            'ვ',
+            'ე',
+            'დ',
+            'გ',
+            'ბ',
+            'ა'
         ]
     };
     var createAdditiveCounter = function (value, min, max, symbols, fallback, suffix) {
@@ -4901,27 +4898,27 @@
         }
         return (value < 0 ? negativeSign : '') + string;
     };
-    var CHINESE_INFORMAL_MULTIPLIERS = '????';
-    var CHINESE_FORMAL_MULTIPLIERS = '????';
-    var JAPANESE_NEGATIVE = '????';
-    var KOREAN_NEGATIVE = '????';
+    var CHINESE_INFORMAL_MULTIPLIERS = '十百千萬';
+    var CHINESE_FORMAL_MULTIPLIERS = '拾佰仟萬';
+    var JAPANESE_NEGATIVE = 'マイナス';
+    var KOREAN_NEGATIVE = '마이너스';
     var createCounterText = function (value, type, appendSuffix) {
         var defaultSuffix = appendSuffix ? '. ' : '';
-        var cjkSuffix = appendSuffix ? '?' : '';
+        var cjkSuffix = appendSuffix ? '、' : '';
         var koreanSuffix = appendSuffix ? ', ' : '';
         var spaceSuffix = appendSuffix ? ' ' : '';
         switch (type) {
             case LIST_STYLE_TYPE.DISC:
-                return '�' + spaceSuffix;
+                return '•' + spaceSuffix;
             case LIST_STYLE_TYPE.CIRCLE:
-                return '?' + spaceSuffix;
+                return '◦' + spaceSuffix;
             case LIST_STYLE_TYPE.SQUARE:
-                return '?' + spaceSuffix;
+                return '◾' + spaceSuffix;
             case LIST_STYLE_TYPE.DECIMAL_LEADING_ZERO:
                 var string = createCounterStyleFromRange(value, 48, 57, true, defaultSuffix);
                 return string.length < 4 ? "0" + string : string;
             case LIST_STYLE_TYPE.CJK_DECIMAL:
-                return createCounterStyleFromSymbols(value, '??????????', cjkSuffix);
+                return createCounterStyleFromSymbols(value, '〇一二三四五六七八九', cjkSuffix);
             case LIST_STYLE_TYPE.LOWER_ROMAN:
                 return createAdditiveCounter(value, 1, 3999, ROMAN_UPPER, LIST_STYLE_TYPE.DECIMAL, defaultSuffix).toLowerCase();
             case LIST_STYLE_TYPE.UPPER_ROMAN:
@@ -4945,28 +4942,28 @@
             case LIST_STYLE_TYPE.KHMER:
                 return createCounterStyleFromRange(value, 6112, 6121, true, defaultSuffix);
             case LIST_STYLE_TYPE.CJK_EARTHLY_BRANCH:
-                return createCounterStyleFromSymbols(value, '????????????', cjkSuffix);
+                return createCounterStyleFromSymbols(value, '子丑寅卯辰巳午未申酉戌亥', cjkSuffix);
             case LIST_STYLE_TYPE.CJK_HEAVENLY_STEM:
-                return createCounterStyleFromSymbols(value, '??????????', cjkSuffix);
+                return createCounterStyleFromSymbols(value, '甲乙丙丁戊己庚辛壬癸', cjkSuffix);
             case LIST_STYLE_TYPE.CJK_IDEOGRAPHIC:
             case LIST_STYLE_TYPE.TRAD_CHINESE_INFORMAL:
-                return createCJKCounter(value, '??????????', CHINESE_INFORMAL_MULTIPLIERS, '?', cjkSuffix, CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
+                return createCJKCounter(value, '零一二三四五六七八九', CHINESE_INFORMAL_MULTIPLIERS, '負', cjkSuffix, CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
             case LIST_STYLE_TYPE.TRAD_CHINESE_FORMAL:
-                return createCJKCounter(value, '??????????', CHINESE_FORMAL_MULTIPLIERS, '?', cjkSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
+                return createCJKCounter(value, '零壹貳參肆伍陸柒捌玖', CHINESE_FORMAL_MULTIPLIERS, '負', cjkSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
             case LIST_STYLE_TYPE.SIMP_CHINESE_INFORMAL:
-                return createCJKCounter(value, '??????????', CHINESE_INFORMAL_MULTIPLIERS, '?', cjkSuffix, CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
+                return createCJKCounter(value, '零一二三四五六七八九', CHINESE_INFORMAL_MULTIPLIERS, '负', cjkSuffix, CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
             case LIST_STYLE_TYPE.SIMP_CHINESE_FORMAL:
-                return createCJKCounter(value, '??????????', CHINESE_FORMAL_MULTIPLIERS, '?', cjkSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
+                return createCJKCounter(value, '零壹贰叁肆伍陆柒捌玖', CHINESE_FORMAL_MULTIPLIERS, '负', cjkSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
             case LIST_STYLE_TYPE.JAPANESE_INFORMAL:
-                return createCJKCounter(value, '??????????', '????', JAPANESE_NEGATIVE, cjkSuffix, 0);
+                return createCJKCounter(value, '〇一二三四五六七八九', '十百千万', JAPANESE_NEGATIVE, cjkSuffix, 0);
             case LIST_STYLE_TYPE.JAPANESE_FORMAL:
-                return createCJKCounter(value, '??????????', '????', JAPANESE_NEGATIVE, cjkSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS);
+                return createCJKCounter(value, '零壱弐参四伍六七八九', '拾百千万', JAPANESE_NEGATIVE, cjkSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS);
             case LIST_STYLE_TYPE.KOREAN_HANGUL_FORMAL:
-                return createCJKCounter(value, '??????????', '????', KOREAN_NEGATIVE, koreanSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS);
+                return createCJKCounter(value, '영일이삼사오육칠팔구', '십백천만', KOREAN_NEGATIVE, koreanSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS);
             case LIST_STYLE_TYPE.KOREAN_HANJA_INFORMAL:
-                return createCJKCounter(value, '??????????', '????', KOREAN_NEGATIVE, koreanSuffix, 0);
+                return createCJKCounter(value, '零一二三四五六七八九', '十百千萬', KOREAN_NEGATIVE, koreanSuffix, 0);
             case LIST_STYLE_TYPE.KOREAN_HANJA_FORMAL:
-                return createCJKCounter(value, '??????????', '???', KOREAN_NEGATIVE, koreanSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS);
+                return createCJKCounter(value, '零壹貳參四五六七八九', '拾百千', KOREAN_NEGATIVE, koreanSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS);
             case LIST_STYLE_TYPE.DEVANAGARI:
                 return createCounterStyleFromRange(value, 0x966, 0x96f, true, defaultSuffix);
             case LIST_STYLE_TYPE.GEORGIAN:
@@ -4978,15 +4975,15 @@
             case LIST_STYLE_TYPE.HEBREW:
                 return createAdditiveCounter(value, 1, 10999, HEBREW, LIST_STYLE_TYPE.DECIMAL, defaultSuffix);
             case LIST_STYLE_TYPE.HIRAGANA:
-                return createCounterStyleFromSymbols(value, '????????????????????????????????????????????????');
+                return createCounterStyleFromSymbols(value, 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわゐゑをん');
             case LIST_STYLE_TYPE.HIRAGANA_IROHA:
-                return createCounterStyleFromSymbols(value, '???????????????????????????????????????????????');
+                return createCounterStyleFromSymbols(value, 'いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす');
             case LIST_STYLE_TYPE.KANNADA:
                 return createCounterStyleFromRange(value, 0xce6, 0xcef, true, defaultSuffix);
             case LIST_STYLE_TYPE.KATAKANA:
-                return createCounterStyleFromSymbols(value, '????????????????????????????????????????????????', cjkSuffix);
+                return createCounterStyleFromSymbols(value, 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヰヱヲン', cjkSuffix);
             case LIST_STYLE_TYPE.KATAKANA_IROHA:
-                return createCounterStyleFromSymbols(value, '???????????????????????????????????????????????', cjkSuffix);
+                return createCounterStyleFromSymbols(value, 'イロハニホヘトチリヌルヲワカヨタレソツネナラムウヰノオクヤマケフコエテアサキユメミシヱヒモセス', cjkSuffix);
             case LIST_STYLE_TYPE.LAO:
                 return createCounterStyleFromRange(value, 0xed0, 0xed9, true, defaultSuffix);
             case LIST_STYLE_TYPE.MONGOLIAN:
@@ -5333,15 +5330,10 @@
                 }
             });
             anonymousReplacedElement.className = PSEUDO_HIDE_ELEMENT_CLASS_BEFORE + " " + PSEUDO_HIDE_ELEMENT_CLASS_AFTER;
-            var newClassName = pseudoElt === PseudoElementType.BEFORE
-                ? " " + PSEUDO_HIDE_ELEMENT_CLASS_BEFORE
-                : " " + PSEUDO_HIDE_ELEMENT_CLASS_AFTER;
-            if (isSVGElementNode(clone)) {
-                clone.className.baseValue += newClassName;
-            }
-            else {
-                clone.className += newClassName;
-            }
+            clone.className +=
+                pseudoElt === PseudoElementType.BEFORE
+                    ? " " + PSEUDO_HIDE_ELEMENT_CLASS_BEFORE
+                    : " " + PSEUDO_HIDE_ELEMENT_CLASS_AFTER;
             return anonymousReplacedElement;
         };
         DocumentCloner.destroy = function (container) {
@@ -6912,9 +6904,7 @@
         if (options === void 0) { options = {}; }
         return renderElement(element, options);
     };
-    if (typeof window !== "undefined") {
-        CacheStorage.setContext(window);
-    }
+    CacheStorage.setContext(window);
     var renderElement = function (element, opts) { return __awaiter(_this, void 0, void 0, function () {
         var ownerDocument, defaultView, instanceName, _a, width, height, left, top, defaultResourceOptions, resourceOptions, defaultOptions, options, windowBounds, documentCloner, clonedElement, container, documentBackgroundColor, bodyBackgroundColor, bgColor, defaultBackgroundColor, backgroundColor, renderOptions, canvas, renderer, root, renderer;
         return __generator(this, function (_b) {
