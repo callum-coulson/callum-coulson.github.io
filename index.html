@@ -1,14 +1,35 @@
 <!DOCTYPE html>
 	<html>
 		<style>
-			#container {
-				width:100%;
-				font-family:"sans serif";
-				background: #333;
+		
+		@font-face{font-family:PirataOne;src:url(/static/media/PirataOne-Regular.a4fe72b9.ttf)}
+		@font-face{font-family:Nyala;src:url(/static/media/nyala.9f895be4.ttf)}
+		@font-face{font-family:HighTower;src:url(/static/media/HTOWERT.9e234219.TTF)}
+		
+		#container {
+				display: flex;
+				flex: 1 1;
+				align-self: center;
+			}
+			
+			div {
 				display:block;
 			}
-
 			
+			.card {
+				position: relative;
+				width: 413px;
+				height: 563px;
+				margin: auto;
+				flex: 1 1;
+			}
+			
+			.card .color {
+				background:rgba(240, 145, 15, 0.5);
+				bottom: 0;
+				mix-blend-mode: color;
+			}
+
 			.card .center {
 				position: absolute;
 				top: 0;
@@ -22,14 +43,59 @@
 				mix-blend-mode: screen;
 				display: none;
 			}
+			
+			.actions {
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				color: #fff;
+			}
+			
+			.actions>.title {
+				top: 20px;
+				font-family: PirataOne;
+				font-size: 22pt;
+			}
+			
+			.actions>.level {
+				top: 66px;
+				width: 20px;
+				font-family: PirataOne;
+				font-size: 14pt;
+				color: #000;
+			}
+			
+			.actions>.initiative {
+				top: 272px;
+				width: 60px;
+				font-family: PirataOne;
+				font-size: 34pt;
+			}
+						
+			.actions .single-line {
+				position: absolute;
+				text-align: center;
+			}
+			
+			
+			
 		</style>
 		<body>
 			<div id="contianer">
 				<div>
 					<h1>Auto Gloomer</h1>
 					<div id="card">
-						<img alt="card" class="center" src="/src/assets/card.jpg">
-						<img alt="card-runes" class="center runes" src="/src/assets/card-runes.jpg">
+						<div>
+							<img alt="card" class="center" src="/src/assets/card.jpg">
+							<img alt="card-runes" class="center runes" src="/src/assets/card-runes.jpg">
+							<div class = "center color"></div>
+							<div class="actions">
+							
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
