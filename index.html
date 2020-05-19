@@ -65,6 +65,7 @@
 				font-family: PirataOne;
 				font-size: 22pt;
 				background-image: linear-gradient(rgba(240, 145, 15, 0.5), white);
+				background-clip: text;
 				-webkit-background-clip: text;
 				color: transparent;
 			}
@@ -88,15 +89,31 @@
 				position: absolute;
 				text-align: center;
 			}
+			.actions .topaction {
+				
+			}
 			
+			.bottomaction {
+				
+			}
+			
+
 			
 			
 		</style>
+		<script src="/src/html2canvas.js" type="text/javascript"></script>
+		<script type="text/javascript">
+		
+			
+			html2canvas(document.querySelector(".capture")).then(canvas => {
+				document.body.appendChild(canvas)
+			});
+		</script>
 		<body>
 			<div id="contianer">
 				<div>
 					<h1>Auto Gloomer</h1>
-					<div class="card">
+					<div class="card capture">
 						<div>
 							<img alt="card" class="center" src="/src/assets/card.jpg">
 							<img alt="card-runes" class="center runes" src="/src/assets/card-runes.jpg">
