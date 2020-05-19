@@ -108,7 +108,7 @@
 		<script type="text/javascript">
 		
 			$( document ).ready(
-				html2canvas(document.querySelector(".capture")).then(canvas => {
+				html2canvas(document.querySelector("#capture")).then(canvas => {
 					document.body.appendChild(canvas)
 				});
 			);
@@ -118,7 +118,7 @@
 			<div id="contianer">
 				<div>
 					<h1>Auto Gloomer</h1>
-					<div class="card capture">
+					<div class="card" id="capture">
 						<div>
 							<img alt="card" class="center" src="/src/assets/card.jpg">
 							<img alt="card-runes" class="center runes" src="/src/assets/card-runes.jpg">
