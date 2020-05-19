@@ -108,10 +108,9 @@
 		<script type="text/javascript">
 			
 			$( document ).ready(
-			element = $("#capture");
-				await html2canvas(element, {
-					windowWidth: element.scrollWidth,
-					windowHeight: element.scrollHeight
+				await html2canvas($('#capture'), {
+					windowWidth: $('#capture').scrollWidth,
+					windowHeight: $('#capture').scrollHeight
 				});
 			);
 			
@@ -163,7 +162,5 @@
 					</div>
 				</div>
 			</div>
-			<canvas>
-			</canvas>
 		</body>
 	</html>
