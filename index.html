@@ -109,8 +109,8 @@
 			
 			$( document ).ready(
 				html2canvas($('#capture'), {
-					windowWidth: $('#capture').scrollWidth,
-					windowHeight: $('#capture').scrollHeight
+					windowWidth: $('#capture').scrollWidth(),
+					windowHeight: $('#capture').scrollHeight()
 				});
 			);
 			
